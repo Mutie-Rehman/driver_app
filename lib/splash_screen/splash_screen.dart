@@ -1,0 +1,52 @@
+import 'dart:async';
+
+import 'package:driver_app/main_screen/main_screen.dart';
+import 'package:flutter/material.dart';
+
+class MySplashScreen extends StatefulWidget {
+  const MySplashScreen({super.key});
+
+  @override
+  State<MySplashScreen> createState() => _MySplashScreenState();
+}
+
+class _MySplashScreenState extends State<MySplashScreen> {
+  startTimer() {
+    Timer(const Duration(seconds: 3), () async {
+      //send user to home screen
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const MainScreen()));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.asset("images/logo_driver_app.jpg"),
+            ),
+            const Text(
+              "Uber Driver App",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
