@@ -16,7 +16,6 @@ class _MainScreenState extends State<MainScreen>
   TabController? tabController;
   int selectedIndex = 0;
 
-  @override
   onItemClicked(int index) {
     setState(() {
       selectedIndex = index;
@@ -24,6 +23,7 @@ class _MainScreenState extends State<MainScreen>
     });
   }
 
+  @override
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);

@@ -11,7 +11,7 @@ void main() async {
           //   primarySwatch: Colors.blue,
           //   useMaterial3: true,
           // ),
-          home: const MySplashScreen())));
+          home: MySplashScreen())));
 }
 
 class MyApp extends StatefulWidget {
