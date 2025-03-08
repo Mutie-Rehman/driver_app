@@ -1,4 +1,8 @@
+import 'package:driver_app/global/global.dart';
+import 'package:driver_app/main_screen/main_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CarInfoScreen extends StatefulWidget {
   const CarInfoScreen({super.key});
@@ -14,6 +18,26 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
 
   List<String> carTypesList = ["Uber-X", "Uber-Go", "Bike"];
   String? selectedCarType;
+
+  saveCarinfo() {
+    Map driverCarInfoMap = {
+      "car_model": carModel.text.trim(),
+      "car_number": carNumber.text.trim(),
+      "car_color": carColor.text.trim(),
+      "type": selectedCarType,
+    };
+    DatabaseReference driversRef =
+        FirebaseDatabase.instance.ref().child("drivers");
+    driversRef
+        .child(currentFirebaseUser!.uid)
+        .child("car_details")
+        .set(driverCarInfoMap);
+
+    Fluttertoast.showToast(msg: "Congratulations! Car details has been saved");
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MainScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +84,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 //model
                 TextField(
                   keyboardType: TextInputType.text,
-                  controller: carNumber,
+                  controller: carModel,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
                     labelText: "Model",
@@ -78,7 +102,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 //color
                 TextField(
                   keyboardType: TextInputType.text,
-                  controller: carNumber,
+                  controller: carColor,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
                     labelText: "Color",
@@ -125,7 +149,14 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (carColor.text.isNotEmpty &&
+                        carModel.text.isNotEmpty &&
+                        carNumber.text.isNotEmpty &&
+                        selectedCarType != null) {
+                      saveCarinfo();
+                    } else {}
+                  },
                   child: const Text(
                     "Submit",
                     style: TextStyle(color: Colors.white),

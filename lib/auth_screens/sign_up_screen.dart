@@ -1,7 +1,11 @@
 import 'package:driver_app/auth_screens/car_info_screen.dart';
 import 'package:driver_app/auth_screens/sign_in_screen.dart';
-import 'package:driver_app/main.dart';
+import 'package:driver_app/global/global.dart';
+import 'package:driver_app/widgets/progress_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -15,6 +19,64 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  validateForm() {
+    if (nameController.text.length < 3) {
+      Fluttertoast.showToast(msg: "Name should have atleast 3 charcters");
+    } else if (!emailController.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Email is not valid");
+    } else if (phoneController.text.length < 11 ||
+        phoneController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Phone Number is not valid");
+    } else if (passwordController.text.length < 6) {
+      Fluttertoast.showToast(msg: "Password should be more than 6 digits");
+    } else {
+      saveDriverInfo();
+    }
+  }
+
+  saveDriverInfo() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        },
+        barrierDismissible: false);
+
+    final User? firebaseUser = (await fAuth
+            .createUserWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error:$msg");
+    }))
+        .user;
+
+    if (firebaseUser != null) {
+      Map driversMap = {
+        "id": firebaseUser.uid,
+        "name": nameController.text.trim(),
+        "email": emailController.text.trim(),
+        "phone": phoneController.text.trim(),
+      };
+      DatabaseReference driversRef =
+          FirebaseDatabase.instance.ref().child("drivers");
+      driversRef.child(firebaseUser.uid).set(driversMap);
+
+      currentFirebaseUser = firebaseUser;
+      Fluttertoast.showToast(msg: "Driver's Info Stored in Database");
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const CarInfoScreen()));
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Account has not been created");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,10 +184,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CarInfoScreen()));
+                    validateForm();
                   },
                   child: const Text(
                     "Create Account",
@@ -147,7 +206,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               MaterialPageRoute(
                                   builder: (context) => const SignInScreen()));
                         },
-                        child: const Text("Sign In"))
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(color: Colors.grey),
+                        ))
                   ],
                 )
               ],
