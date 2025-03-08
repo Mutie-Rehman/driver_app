@@ -40,6 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 //textfields
                 //email
                 TextField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: emailController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
@@ -57,6 +58,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 //password
                 TextField(
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
                   controller: passwordController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
@@ -73,7 +76,19 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
+                ),
+                ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                  onPressed: () {},
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

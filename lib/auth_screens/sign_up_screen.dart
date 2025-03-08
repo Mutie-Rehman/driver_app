@@ -1,3 +1,4 @@
+import 'package:driver_app/auth_screens/car_info_screen.dart';
 import 'package:driver_app/auth_screens/sign_in_screen.dart';
 import 'package:driver_app/main.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //textfields
                 //name
                 TextField(
+                  keyboardType: TextInputType.name,
                   controller: nameController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
@@ -60,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 //email
                 TextField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: emailController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
@@ -77,6 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 //phone
                 TextField(
+                  keyboardType: TextInputType.phone,
                   controller: phoneController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
@@ -94,6 +98,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 //password
                 TextField(
+                  obscureText: true,
+                  keyboardType: TextInputType.text,
                   controller: passwordController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
@@ -110,7 +116,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
+                ),
+                ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CarInfoScreen()));
+                  },
+                  child: const Text(
+                    "Create Account",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
