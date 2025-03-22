@@ -36,10 +36,10 @@ class _MainScreenState extends State<MainScreen>
           controller: tabController,
           physics: const NeverScrollableScrollPhysics(),
           children: const [
-            EarningTab(),
             HomeTab(),
-            ProfileTab(),
+            EarningTab(),
             RatingsTab(),
+            ProfileTab(),
           ]),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
