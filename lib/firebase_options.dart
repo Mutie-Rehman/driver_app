@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA9RLSP3yI11GwEIEEzhaPw44jnHusAqy4',
+    apiKey: '',
     appId: '1:184545609208:android:ce6ca52b0590c4e598420d',
     messagingSenderId: '184545609208',
     projectId: 'uber-clone-5d2c9',
@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC_SXjc602W3DpLJF_D6kDLOAHM4DUK23Y',
+    apiKey: '',
     appId: '1:184545609208:ios:f8c7fbb865f40fd498420d',
     messagingSenderId: '184545609208',
     projectId: 'uber-clone-5d2c9',
