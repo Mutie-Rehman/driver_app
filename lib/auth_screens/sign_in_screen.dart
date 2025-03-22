@@ -1,5 +1,12 @@
 import 'package:driver_app/auth_screens/sign_up_screen.dart';
+import 'package:driver_app/global/global.dart';
+import 'package:driver_app/main_screen/main_screen.dart';
+import 'package:driver_app/splash_screen/splash_screen.dart';
+import 'package:driver_app/widgets/progress_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -11,6 +18,51 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  validateForm() {
+    if (!emailController.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Email is not valid");
+    } else if (passwordController.text.length < 6 &&
+        passwordController.text.isNotEmpty) {
+      Fluttertoast.showToast(msg: "Password should be more than 6 digits");
+    } else {
+      loginDriver();
+    }
+  }
+
+  //login method
+  loginDriver() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        },
+        barrierDismissible: false);
+
+    final User? firebaseUser = (await fAuth
+            .signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error:$msg");
+    }))
+        .user;
+
+    if (firebaseUser != null) {
+      currentFirebaseUser = firebaseUser;
+      Fluttertoast.showToast(msg: "Login Successful");
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const MySplashScreen()));
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Login Failed");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +133,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {},
+                  onPressed: () {
+                    validateForm();
+                  },
                   child: const Text(
                     "Login",
                     style: TextStyle(color: Colors.white),
