@@ -1,5 +1,6 @@
 import 'package:driver_app/global/global.dart';
 import 'package:driver_app/main_screen/main_screen.dart';
+import 'package:driver_app/splash_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -34,8 +35,8 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
         .set(driverCarInfoMap);
 
     Fluttertoast.showToast(msg: "Congratulations! Car details has been saved");
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MainScreen()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const MySplashScreen()));
   }
 
   @override
